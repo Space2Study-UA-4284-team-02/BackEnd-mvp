@@ -4,7 +4,7 @@ function generateSecret() {
   return crypto.randomBytes(64).toString('hex')
 }
 
-console.log('ACCESS_TOKEN_SECRET=' + generateSecret())
-console.log('REFRESH_TOKEN_SECRET=' + generateSecret())
-console.log('RESET_PASSWORD_TOKEN_SECRET=' + generateSecret())
-console.log('CONFIRMATION_TOKEN_SECRET=' + generateSecret())
+console.log('JWT_ACCESS_SECRET=' + generateSecret())
+console.log('JWT_REFRESH_SECRET=' + generateSecret())
+console.log('JWT_RESET_SECRET=' + generateSecret())
+console.log('JWT_CONFIRM_SECRET=' + generateSecret())
