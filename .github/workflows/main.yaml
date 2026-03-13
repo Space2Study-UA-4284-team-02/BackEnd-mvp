@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: 'Checkout the Repo'
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # - name: Run DB
 
@@ -39,8 +41,8 @@ jobs:
       - name: 'Install dependencies'
         run: npm install
 
-      - name: 'Run Tests'
-        run: npm run test
+      - name: Test with coverage
+        run: npm run test:coverage
         env:
           NODE_OPTIONS: --max_old_space_size=4096
           MONGODB_URL: mongodb://${{secrets.MONGODB_USER}}:${{secrets.MONGODB_PASS}}@localhost:27017/${{secrets.MONGODB_DB}}?authSource=admin
@@ -64,3 +66,10 @@ jobs:
           GMAIL_REFRESH_TOKEN: ${{secrets.GMAIL_REFRESH_TOKEN}}
           GMAIL_REDIRECT_URI: ${{secrets.GMAIL_REDIRECT_URI}}
           COOKIE_DOMAIN: ${{secrets.COOKIE_DOMAIN}}
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        if: success() || failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
