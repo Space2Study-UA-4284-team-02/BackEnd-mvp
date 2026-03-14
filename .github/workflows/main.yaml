@@ -33,10 +33,10 @@ jobs:
         env:
           WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
 
-      - name: 'Install Node.js v.14'
+      - name: 'Install Node.js v.18'
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
 
       - name: 'Install dependencies'
         run: npm install
@@ -68,14 +68,13 @@ jobs:
           COOKIE_DOMAIN: ${{secrets.COOKIE_DOMAIN}}
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@9598b8a83feef37de07f549027fab50ecffe6a6e
+        uses: SonarSource/sonarqube-scan-action@9598b8a83feef37de07f549027fab50ecffe6a6e
         if: success() || failure()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT }}
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.sources=src
