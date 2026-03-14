@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Space2Study-UA-4284-team-02_BackEnd-mvp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Space2Study-UA-4284-team-02_BackEnd-mvp)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Space2Study-UA-4284-team-02_BackEnd-mvp&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Space2Study-UA-4284-team-02_BackEnd-mvp)
 <a href="https://softserve.academy/"><img src="https://github.com/ita-social-projects/SpaceToStudy-Client/blob/main/photo2.jpg" title="SoftServe IT Academy" alt="SoftServe IT Academy"></a>
 
 # SpaceToStudy project
