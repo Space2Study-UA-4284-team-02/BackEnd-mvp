@@ -26,7 +26,9 @@ const initialization = (app) => {
 
   app.use('/', router)
 
-  app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
+  if (process.env.NODE_ENV !== 'production') {
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
+  }
 
   app.use((_req, _res, next) => {
     next(createNotFoundError())
