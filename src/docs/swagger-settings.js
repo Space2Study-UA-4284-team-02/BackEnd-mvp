@@ -18,7 +18,7 @@ const swaggerOptions = {
         cookieAuth: {
           type: 'apiKey',
           in: 'cookie',
-          name: 'token',
+          name: 'accessToken',
           description: 'Enter cookie for authentication'
         }
       }
