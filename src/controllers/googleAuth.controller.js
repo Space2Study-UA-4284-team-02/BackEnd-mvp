@@ -1,4 +1,4 @@
-const googleAuthService = require('../services/googleAuth.service')
+const googleAuthService = require('~/services/googleAuth.service')
 const { tokenNames } = require('~/consts/auth')
 const { oneDayInMs } = require('~/consts/auth')
 const {
@@ -6,14 +6,15 @@ const {
 } = require('~/configs/config')
 
 const googleLoginOrSignup = async (req, res) => {
-  const { idToken, role } = req.body
+  const token = req.body?.token?.credential
+  const role = req.body?.role
   const language = req.lang
 
-  if (typeof idToken !== 'string') {
-    return res.status(400).json({ message: 'idToken is required' })
+  if (typeof token !== 'string' || !token) {
+    return res.status(400).json({ message: 'token is required' })
   }
 
-  const tokens = await googleAuthService.loginOrSignupWithGoogle(idToken, role || 'student', language || 'en')
+  const tokens = await googleAuthService.loginOrSignupWithGoogle(token, role || 'student', language || 'en')
 
   const COOKIE_OPTIONS = {
     maxAge: oneDayInMs,
