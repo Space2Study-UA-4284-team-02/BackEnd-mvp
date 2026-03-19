@@ -7,12 +7,13 @@ const errors = require('~/consts/errors')
 const tokenService = require('~/services/token')
 const Token = require('~/models/token')
 const { expectError } = require('~/test/helpers')
+const googleAuthService = require('~/services/googleAuth.service')
 
 describe('Auth controller', () => {
   let app, server, signupResponse
 
   beforeAll(async () => {
-    ; ({ app, server } = await serverInit())
+    ;({ app, server } = await serverInit())
   })
 
   beforeEach(async () => {
@@ -86,6 +87,43 @@ describe('Auth controller', () => {
       const response = await app.post('/auth/signup').send(user)
 
       expectError(409, errors.ALREADY_REGISTERED, response)
+    })
+  })
+
+  describe('Google Auth (login/signup) 🚀', () => {
+    const fakeToken = 'google-token-123'
+    const fakeTokens = {
+      accessToken: 'access-token-abc',
+      refreshToken: 'refresh-token-def'
+    }
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should fail if there is no token or it is wrong type', async () => {
+      const noToken = await app.post('/auth/google-auth').send({})
+      expect(noToken.status).toBe(400)
+      expect(noToken.body.message).toBe('token is required')
+
+      const wrongType = await app.post('/auth/google-auth').send({ token: 123 })
+      expect(wrongType.status).toBe(400)
+      expect(wrongType.body.message).toBe('token is required')
+    })
+
+    it('should log in or sign up with Google and set cookies', async () => {
+      jest.spyOn(googleAuthService, 'loginOrSignupWithGoogle').mockResolvedValue(fakeTokens)
+
+      const response = await app
+        .post('/auth/google-auth')
+        .send({ token: { credential: fakeToken }, role: 'student', language: 'en' })
+
+      // Did we call the service with correct info?
+      expect(googleAuthService.loginOrSignupWithGoogle).toHaveBeenCalledWith(fakeToken, 'student', 'en')
+
+      // Check response
+      expect(response.status).toBe(200)
+      expect(response.body).toEqual({ accessToken: fakeTokens.accessToken })
     })
   })
 
