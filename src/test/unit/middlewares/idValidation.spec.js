@@ -37,12 +37,6 @@ describe('idValidation middleware', () => {
     mongoose.Types.ObjectId.isValid.mockReturnValue(false)
     expect(() => idValidation(req, res, next, invalidId)).toThrow()
     expect(errorsHelper.createError).toHaveBeenCalledWith(400, INVALID_ID)
-  })
-
-  it('should throw an error if the id is invalid', () => {
-    mongoose.Types.ObjectId.isValid.mockReturnValue(false)
-    expect(() => idValidation(req, res, next, invalidId)).toThrow()
-    expect(errorsHelper.createError).toHaveBeenCalledWith(400, INVALID_ID)
     expect(next).not.toHaveBeenCalled()
   })
 })
