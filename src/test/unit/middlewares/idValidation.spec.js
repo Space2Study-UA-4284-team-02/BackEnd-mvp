@@ -1,4 +1,3 @@
-const idValidation = require('~/middlewares/idValidation')
 const { INVALID_ID } = require('~/consts/errors')
 
 jest.mock('mongoose', () => ({
@@ -15,6 +14,7 @@ jest.mock('~/utils/errorsHelper', () => ({
 
 const mongoose = require('mongoose')
 const errorsHelper = require('~/utils/errorsHelper')
+const idValidation = require('~/middlewares/idValidation')
 
 describe('idValidation middleware', () => {
   const req = {}
@@ -37,5 +37,12 @@ describe('idValidation middleware', () => {
     mongoose.Types.ObjectId.isValid.mockReturnValue(false)
     expect(() => idValidation(req, res, next, invalidId)).toThrow()
     expect(errorsHelper.createError).toHaveBeenCalledWith(400, INVALID_ID)
+  })
+
+  it('should throw an error if the id is invalid', () => {
+    mongoose.Types.ObjectId.isValid.mockReturnValue(false)
+    expect(() => idValidation(req, res, next, invalidId)).toThrow()
+    expect(errorsHelper.createError).toHaveBeenCalledWith(400, INVALID_ID)
+    expect(next).not.toHaveBeenCalled()
   })
 })
