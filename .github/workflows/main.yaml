@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop, devops]
+    branches: [main, develop]
   pull_request:
-    branches: [main, develop, devops]
+    branches: [main, develop]
 
 jobs:
   Test_DEV:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: 'Checkout the Repo'
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # - name: Run DB
 
@@ -31,16 +33,16 @@ jobs:
         env:
           WAIT_FOR_VERSION: 4df3f9262d84cab0039c07bf861045fbb3c20ab7 # v2.2.3
 
-      - name: 'Install Node.js v.14'
+      - name: 'Install Node.js v.18'
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
 
       - name: 'Install dependencies'
         run: npm install
 
-      - name: 'Run Tests'
-        run: npm run test
+      - name: Test with coverage
+        run: npm run test:coverage
         env:
           NODE_OPTIONS: --max_old_space_size=4096
           MONGODB_URL: mongodb://${{secrets.MONGODB_USER}}:${{secrets.MONGODB_PASS}}@localhost:27017/${{secrets.MONGODB_DB}}?authSource=admin
