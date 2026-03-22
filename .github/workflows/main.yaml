@@ -68,7 +68,7 @@ jobs:
           COOKIE_DOMAIN: ${{secrets.COOKIE_DOMAIN}}
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@9598b8a83feef37de07f549027fab50ecffe6a6e
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
         if: success() || failure()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,4 +81,5 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.sources=src
             -Dsonar.tests=src/test
-            -Dsonar.javascript.lcov.reportPaths=src/test/coverage/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=./src/test/coverage/lcov.info
+# 9598b8a83feef37de07f549027fab50ecffe6a6e
