@@ -15,16 +15,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Run DB
-
       - name: 'Start MongoDB'
         uses: supercharge/mongodb-github-action@1.8.0
         with:
           mongodb-version: latest
           mongodb-port: 27017
-          mongodb-username: ${{secrets.MONGODB_USER}}
-          mongodb-password: ${{secrets.MONGODB_PASS}}
-          mongodb-db: ${{secrets.MONGODB_DB}}
 
       - name: 'Wait for the database to start'
         run: |
@@ -42,21 +37,21 @@ jobs:
         run: npm install
 
       - name: Test with coverage
-        run: npm run test:coverage
+        run: npm test
         env:
           NODE_OPTIONS: --max_old_space_size=4096
-          MONGODB_URL: mongodb://${{secrets.MONGODB_USER}}:${{secrets.MONGODB_PASS}}@localhost:27017/${{secrets.MONGODB_DB}}?authSource=admin
-          JWT_ACCESS_SECRET: ${{secrets.JWT_ACCESS_SECRET}}
-          JWT_REFRESH_SECRET: ${{secrets.JWT_REFRESH_SECRET}}
-          JWT_RESET_SECRET: ${{secrets.JWT_RESET_SECRET}}
-          JWT_CONFIRM_SECRET: ${{secrets.JWT_CONFIRM_SECRET}}
-          JWT_ACCESS_EXPIRES_IN: ${{secrets.JWT_ACCESS_EXPIRES_IN}}
-          JWT_REFRESH_EXPIRES_IN: ${{secrets.JWT_REFRESH_EXPIRES_IN}}
-          JWT_RESET_EXPIRES_IN: ${{secrets.JWT_RESET_EXPIRES_IN}}
-          JWT_CONFIRM_EXPIRES_IN: ${{secrets.JWT_CONFIRM_EXPIRES_IN}}
+          MONGODB_URL: mongodb://localhost:27017/${{secrets.MONGODB_DB}}
+          JWT_ACCESS_SECRET: test_access_secret
+          JWT_REFRESH_SECRET: test_refresh_secret
+          JWT_RESET_SECRET: test_reset_secret
+          JWT_CONFIRM_SECRET: test_confirm_secret
+          JWT_ACCESS_EXPIRES_IN: 15m
+          JWT_REFRESH_EXPIRES_IN: 7d
+          JWT_RESET_EXPIRES_IN: 15m
+          JWT_CONFIRM_EXPIRES_IN: 15m
           CLIENT_URL: ${{secrets.CLIENT_URL}}
           SERVER_URL: ${{secrets.SERVER_URL}}
-          SERVER_PORT: ${{secrets.SERVER_PORT}}
+          SERVER_PORT: 0
           MAIL_USER: ${{secrets.MAIL_USER}}
           MAIL_PASS: ${{secrets.MAIL_PASS}}
           MAIL_FIRSTNAME: ${{secrets.MAIL_FIRSTNAME}}
