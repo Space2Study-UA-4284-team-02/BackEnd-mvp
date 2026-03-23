@@ -2,6 +2,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Space2Study-UA-4284-team-02_BackEnd-mvp&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Space2Study-UA-4284-team-02_BackEnd-mvp)
 <a href="https://softserve.academy/"><img src="https://github.com/ita-social-projects/SpaceToStudy-Client/blob/main/photo2.jpg" title="SoftServe IT Academy" alt="SoftServe IT Academy"></a>
 
+
 # SpaceToStudy project
 
 SpaceToStudy project is a platform where experts in various fields share their knowledge and students can learn from the best. Here you can find the proper training course, find a tutor, or find students and receive feedback from them.
