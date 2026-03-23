@@ -37,7 +37,7 @@ jobs:
         run: npm install
 
       - name: Test with coverage
-        run: npm run test:coverage
+        run: npm test
         env:
           NODE_OPTIONS: --max_old_space_size=4096
           MONGODB_URL: mongodb://localhost:27017/${{secrets.MONGODB_DB}}
