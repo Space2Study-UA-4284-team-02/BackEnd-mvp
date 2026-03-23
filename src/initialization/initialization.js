@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const swaggerUI = require('swagger-ui-express')
+const swaggerSpec = require('../docs/swagger-settings')
 
 const {
   config: { CLIENT_URL }
@@ -23,6 +25,10 @@ const initialization = (app) => {
   )
 
   app.use('/', router)
+
+  if (process.env.NODE_ENV !== 'production') {
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
+  }
 
   app.use((_req, _res, next) => {
     next(createNotFoundError())
