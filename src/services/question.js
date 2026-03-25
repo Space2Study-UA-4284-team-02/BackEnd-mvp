@@ -17,7 +17,14 @@ const questionService = {
   },
 
   getQuestionById: async (id) => {
-    return await Question.findById(id).lean().exec()
+    const question = await Question.findById(id).populate({ path: 'category', select: '_id name' }).lean().exec()
+
+    if (!question) return null
+
+    return {
+      ...question,
+      category: question.category?._id || null
+    }
   },
 
   createQuestion: async (author, data) => {
