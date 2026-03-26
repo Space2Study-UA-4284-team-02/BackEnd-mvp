@@ -14,6 +14,8 @@ const COOKIE_OPTIONS = {
   sameSite: 'none',
   domain: COOKIE_DOMAIN
 }
+const { createError } = require('~/utils/errorsHelper')
+const { BAD_CONFIRMATION_TOKEN } = require('~/consts/errors')
 
 const signup = async (req, res) => {
   const { role, firstName, lastName, email, password } = req.body
@@ -86,11 +88,34 @@ const updatePassword = async (req, res) => {
   res.status(204).end()
 }
 
+const confirmEmail = async (req, res) => {
+  const token = req.params.token || req.query.token
+  const lang = req.lang
+
+  if (!token) {
+    return res.status(400).json(createError(400, BAD_CONFIRMATION_TOKEN))
+  }
+
+  try {
+    await authService.confirmEmail(token, lang)
+    // res.status(204).end()
+    res.redirect(`${process.env.CLIENT_URL}/email-confirmed`)
+  } catch (err) {
+    // JSON errors are returned in case of invalid or expired token, while valid token leads to redirection, so we need to handle both cases
+    return res.status(err.status || 400).json({
+      status: err.status || 400,
+      code: err.code || 'BAD_CONFIRMATION_TOKEN',
+      message: err.message || 'The confirmation token is either invalid or has expired.'
+    })
+  }
+}
+
 module.exports = {
   signup,
   login,
   logout,
   refreshAccessToken,
   sendResetPasswordEmail,
-  updatePassword
+  updatePassword,
+  confirmEmail
 }

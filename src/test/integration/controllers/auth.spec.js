@@ -7,12 +7,13 @@ const errors = require('~/consts/errors')
 const tokenService = require('~/services/token')
 const Token = require('~/models/token')
 const { expectError } = require('~/test/helpers')
+const authService = require('~/services/auth')
 
 describe('Auth controller', () => {
   let app, server, signupResponse
 
   beforeAll(async () => {
-    ; ({ app, server } = await serverInit())
+    ;({ app, server } = await serverInit())
   })
 
   beforeEach(async () => {
@@ -112,6 +113,39 @@ describe('Auth controller', () => {
       const response = await app.patch('/auth/reset-password/invalid-token').send({ password: 'valid_pass1' })
 
       expectError(400, errors.BAD_RESET_TOKEN, response)
+    })
+  })
+
+  describe('ConfirmEmail endpoint', () => {
+    let confirmToken
+    beforeEach(() => {
+      const authService = require('~/services/auth')
+      confirmToken = 'valid-confirmation-token'
+      jest.spyOn(authService, 'confirmEmail').mockResolvedValue()
+    })
+
+    afterEach(() => jest.resetAllMocks())
+
+    it('should redirect to the email confirmed page if the token is valid', async () => {
+      const response = await app.get(`/auth/confirm-email/${confirmToken}`)
+
+      expect(response.status).toBe(302)
+      expect(response.headers.location).toBe(`${process.env.CLIENT_URL}/email-confirmed`)
+    })
+
+    it('should throw 404 error if the token is not provided', async () => {
+      const response = await app.get('/auth/confirm-email/')
+
+      expectError(404, errors.NOT_FOUND, response)
+    })
+
+    it('should throw BAD_CONFIRMATION_TOKEN error if the token is invalid', async () => {
+      jest.spyOn(authService, 'confirmEmail').mockImplementation(() => {
+        throw errors.BAD_CONFIRMATION_TOKEN
+      })
+
+      const response = await app.get('/auth/confirm-email/invalid-token')
+      expectError(400, errors.BAD_CONFIRMATION_TOKEN, response)
     })
   })
 })
