@@ -1,5 +1,3 @@
-const errorMiddleware = require('~/middlewares/error')
-
 jest.mock('~/logger/logger', () => ({
   error: jest.fn()
 }))
@@ -13,6 +11,7 @@ jest.mock('~/consts/errors', () => ({
   VALIDATION_ERROR: jest.fn()
 }))
 
+const errorMiddleware = require('~/middlewares/error')
 const logger = require('~/logger/logger')
 const getUniqueFields = require('~/utils/getUniqueFields')
 const {
