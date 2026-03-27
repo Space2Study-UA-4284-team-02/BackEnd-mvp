@@ -10,7 +10,6 @@ const app = express()
 const start = async () => {
   try {
     await serverSetup(app)
-    console.log('Server is running...')
   } catch (err) {
     logger.error(err)
   }

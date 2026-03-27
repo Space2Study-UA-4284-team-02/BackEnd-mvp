@@ -2,6 +2,7 @@ const { OAuth2Client } = require('google-auth-library')
 const authService = require('~/services/auth')
 const { getUserByEmail, createUser } = require('~/services/user')
 const { gmailCredentials } = require('~/configs/config')
+const errors = require('~/consts/errors')
 const crypto = require('crypto')
 
 const client = new OAuth2Client(gmailCredentials.clientId)
@@ -17,7 +18,15 @@ const googleAuthService = {
 
   loginOrSignupWithGoogle: async (token, role, language) => {
     const payload = await googleAuthService.verifyIdToken(token)
-    const { email, given_name: firstName, family_name: lastName } = payload
+    const { email, email_verified, given_name, family_name } = payload
+
+    if (!email || !email_verified) {
+      throw errors.UNAUTHORIZED
+    }
+
+    // fallback if given_name or family_name is not provided by Google, use default values
+    const firstName = given_name || 'Unknown'
+    const lastName = family_name || 'User'
 
     let user = await getUserByEmail(email)
 

@@ -1,4 +1,4 @@
-const googleAuthService = require('~/services/googleAuth.service')
+const googleAuthService = require('~/services/googleAuth')
 const { tokenNames } = require('~/consts/auth')
 const { oneDayInMs } = require('~/consts/auth')
 const {
@@ -27,9 +27,9 @@ const googleLoginOrSignup = async (req, res) => {
   res.cookie(tokenNames.ACCESS_TOKEN, tokens.accessToken, COOKIE_OPTIONS)
   res.cookie(tokenNames.REFRESH_TOKEN, tokens.refreshToken, COOKIE_OPTIONS)
 
-  delete tokens.refreshToken
-
-  res.status(200).json(tokens)
+  // eslint-disable-next-line no-unused-vars
+  const { refreshToken, ...safeTokens } = tokens
+  res.status(200).json(safeTokens)
 }
 
 module.exports = {

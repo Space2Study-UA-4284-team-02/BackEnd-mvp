@@ -7,7 +7,7 @@ const errors = require('~/consts/errors')
 const tokenService = require('~/services/token')
 const Token = require('~/models/token')
 const { expectError } = require('~/test/helpers')
-const googleAuthService = require('~/services/googleAuth.service')
+const googleAuthService = require('~/services/googleAuth')
 
 describe('Auth controller', () => {
   let app, server, signupResponse
@@ -90,7 +90,7 @@ describe('Auth controller', () => {
     })
   })
 
-  describe('Google Auth (login/signup) 🚀', () => {
+  describe('Google Auth (login/signup)', () => {
     const fakeToken = 'google-token-123'
     const fakeTokens = {
       accessToken: 'access-token-abc',
@@ -98,7 +98,7 @@ describe('Auth controller', () => {
     }
 
     afterEach(() => {
-      jest.resetAllMocks()
+      jest.restoreAllMocks()
     })
 
     it('should fail if there is no token or it is wrong type', async () => {
@@ -112,7 +112,7 @@ describe('Auth controller', () => {
     })
 
     it('should log in or sign up with Google and set cookies', async () => {
-      jest.spyOn(googleAuthService, 'loginOrSignupWithGoogle').mockResolvedValue(fakeTokens)
+      jest.spyOn(googleAuthService, 'loginOrSignupWithGoogle').mockResolvedValue({ ...fakeTokens })
 
       const response = await app
         .post('/auth/google-auth')
@@ -124,6 +124,20 @@ describe('Auth controller', () => {
       // Check response
       expect(response.status).toBe(200)
       expect(response.body).toEqual({ accessToken: fakeTokens.accessToken })
+
+      // Ensure refreshToken is not leaked in the JSON body
+      expect(response.body).not.toHaveProperty('refreshToken')
+
+      // Check cookies (access and refresh tokens should be set)
+      const setCookieHeader = response.headers['set-cookie']
+      expect(setCookieHeader).toBeDefined()
+      expect(Array.isArray(setCookieHeader)).toBe(true)
+      expect(setCookieHeader).toEqual(
+        expect.arrayContaining([
+          expect.stringContaining(`accessToken=${fakeTokens.accessToken}`),
+          expect.stringContaining(`refreshToken=${fakeTokens.refreshToken}`)
+        ])
+      )
     })
   })
 

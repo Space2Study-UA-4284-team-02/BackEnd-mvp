@@ -7,7 +7,7 @@ const adminInvitation = require('~/routes/adminInvitation')
 const question = require('~/routes/question')
 const resourcesCategory = require('~/routes/resourcesCategory')
 const offer = require('~/routes/offer')
-const googleAuth = require('~/routes/googleAuth.route')
+const googleAuth = require('~/routes/googleAuth')
 
 router.use('/auth', auth)
 router.use('/auth/google-auth', googleAuth)
