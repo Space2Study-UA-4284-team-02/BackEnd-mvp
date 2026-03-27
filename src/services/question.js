@@ -23,7 +23,7 @@ const questionService = {
 
     return {
       ...question,
-      category: question.category?._id || null
+      categoryId: question.category?._id || null
     }
   },
 
