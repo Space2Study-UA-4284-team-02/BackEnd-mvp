@@ -126,12 +126,8 @@ const authService = {
       throw createError(404, USER_NOT_FOUND)
     }
 
-    if (user.isEmailConfirmed) {
-      return
-    }
-
     await privateUpdateUser(tokenData.id, { isEmailConfirmed: true })
-    await tokenService.removeToken(confirmationToken, CONFIRM_TOKEN)
+    await tokenService.removeConfirmToken(tokenData.id)
   }
 }
 

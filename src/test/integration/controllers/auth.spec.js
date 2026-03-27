@@ -119,12 +119,11 @@ describe('Auth controller', () => {
   describe('ConfirmEmail endpoint', () => {
     let confirmToken
     beforeEach(() => {
-      const authService = require('~/services/auth')
       confirmToken = 'valid-confirmation-token'
       jest.spyOn(authService, 'confirmEmail').mockResolvedValue()
     })
 
-    afterEach(() => jest.resetAllMocks())
+    afterEach(() => jest.restoreAllMocks())
 
     it('should redirect to the email confirmed page if the token is valid', async () => {
       const response = await app.get(`/auth/confirm-email/${confirmToken}`)
@@ -140,8 +139,9 @@ describe('Auth controller', () => {
     })
 
     it('should throw BAD_CONFIRMATION_TOKEN error if the token is invalid', async () => {
-      jest.spyOn(authService, 'confirmEmail').mockImplementation(() => {
-        throw errors.BAD_CONFIRMATION_TOKEN
+      jest.spyOn(authService, 'confirmEmail').mockRejectedValue({
+        status: 400,
+        ...errors.BAD_CONFIRMATION_TOKEN
       })
 
       const response = await app.get('/auth/confirm-email/invalid-token')
