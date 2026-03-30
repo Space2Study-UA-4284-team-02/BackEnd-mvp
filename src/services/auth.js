@@ -127,7 +127,7 @@ const authService = {
     }
 
     await privateUpdateUser(tokenData.id, { isEmailConfirmed: true })
-    await tokenService.removeConfirmToken(tokenData.id)
+    await tokenService.removeConfirmToken(confirmationToken)
   }
 }
 

@@ -88,10 +88,8 @@ const updatePassword = async (req, res) => {
 
 const confirmEmail = async (req, res) => {
   const token = req.params.token
-  const lang = req.lang
 
-  await authService.confirmEmail(token, lang)
-  // res.status(204).end()
+  await authService.confirmEmail(token)
   res.redirect(`${process.env.CLIENT_URL}/email-confirmed`)
 }
 
