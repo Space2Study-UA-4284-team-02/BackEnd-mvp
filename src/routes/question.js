@@ -17,7 +17,6 @@ router.param('id', idValidation)
 const params = [{ model: Question, idName: 'id' }]
 
 router.get('/', asyncWrapper(questionController.getQuestions))
-// router.get('/:questionId', isEntityValid({ params }), asyncWrapper(questionController.getQuestionById))
 router.get('/:id', isEntityValid({ params }), asyncWrapper(questionController.getQuestionById))
 router.use(restrictTo(TUTOR))
 router.post('/', asyncWrapper(questionController.createQuestion))

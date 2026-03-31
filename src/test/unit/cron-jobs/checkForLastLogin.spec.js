@@ -27,15 +27,12 @@ describe('checkForLastUserLogin cron-job', () => {
   beforeEach(() => {
     mockedUsersList = { items: [{ ...mockedUser, lastLogin: mockedLastLoginDateToSendEmail }] }
     userService.getUsers = jest.fn(() => mockedUsersList)
-    // const mockedCurrentDate = new Date(2023, 7, 23, 25, 0, 0, 0)
     const mockedCurrentDate = new Date(2023, 7, 24, 1, 0, 0, 0)
-    // jest.useFakeTimers('modern').setSystemTime(mockedCurrentDate)
-    jest.spyOn(Date, 'now').mockReturnValue(mockedCurrentDate.getTime())
+    jest.useFakeTimers('modern').setSystemTime(mockedCurrentDate)
   })
 
   afterEach(() => {
-    // jest.runOnlyPendingTimers()
-    jest.clearAllTimers()
+    jest.runOnlyPendingTimers()
     jest.useRealTimers()
   })
 
