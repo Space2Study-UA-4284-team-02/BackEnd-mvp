@@ -71,6 +71,10 @@ const errors = {
     code: 'TEMPLATE_NOT_FOUND',
     message: 'The requested template was not found.'
   },
+  BAD_CONFIRMATION_TOKEN: {
+    code: 'BAD_CONFIRMATION_TOKEN',
+    message: 'The confirmation token is either invalid or has expired.'
+  },
   BAD_RESET_TOKEN: {
     code: 'BAD_RESET_TOKEN',
     message: 'The reset token is either invalid or has expired.'

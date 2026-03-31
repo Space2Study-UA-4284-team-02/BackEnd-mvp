@@ -1,7 +1,7 @@
 const authService = require('~/services/auth')
 const { oneDayInMs } = require('~/consts/auth')
 const {
-  config: { COOKIE_DOMAIN }
+  config: { COOKIE_DOMAIN, CLIENT_URL }
 } = require('~/configs/config')
 const {
   tokenNames: { REFRESH_TOKEN, ACCESS_TOKEN }
@@ -86,11 +86,19 @@ const updatePassword = async (req, res) => {
   res.status(204).end()
 }
 
+const confirmEmail = async (req, res) => {
+  const token = req.params.token
+
+  await authService.confirmEmail(token)
+  res.redirect(`${CLIENT_URL}/email-confirmed`)
+}
+
 module.exports = {
   signup,
   login,
   logout,
   refreshAccessToken,
   sendResetPasswordEmail,
-  updatePassword
+  updatePassword,
+  confirmEmail
 }
