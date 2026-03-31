@@ -24,7 +24,7 @@ const getQuestionById = async (req, res) => {
   const { id } = req.params
 
   const question = await questionService.getQuestionById(id)
-
+  if (!question) return res.status(404).json({ message: 'Question not found' })
   res.status(200).json(question)
 }
 
